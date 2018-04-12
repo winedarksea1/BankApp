@@ -9,6 +9,7 @@ public class User implements Serializable {
 
 	private final Logger log = Logger.getLogger(User.class);
 	
+	private int userId;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -55,6 +56,14 @@ public class User implements Serializable {
 			account += amountToDeposit;
 			log.info("Deposited " + amountToDeposit);
 		}
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 			
 	public String getFirstName() {
@@ -172,6 +181,7 @@ public class User implements Serializable {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password=" + password
 				+ ", account=" + account + ", isAdmin=" + isAdmin + ", isApprovedUser=" + isApprovedUser + "]";
 	}
+
 	
 	
 }
