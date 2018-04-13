@@ -30,6 +30,16 @@ public class User implements Serializable {
 		this.isApprovedUser = false;
 	}
 	
+	public User(String firstName, String lastName, String email, String password, double accountBalance) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.accountBalance = accountBalance;
+		this.isAdmin = false;
+		this.isApprovedUser = false;
+	}
+	
 	public void approveUser(User user) {
 		if (user.isAdmin) {
 			System.out.println("Would you like to approve this User");
