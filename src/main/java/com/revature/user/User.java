@@ -14,17 +14,18 @@ public class User implements Serializable {
 	private String lastName;
 	private String email;
 	private String password;
-	private double account;
+	private double accountBalance;
 	private boolean isAdmin;
 	private boolean isApprovedUser;
 	
 	public User() {}
 	
-	public User(String firstName, String lastName, String email) {
+	public User(String firstName, String lastName, String email, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.account = 0.00;
+		this.password = password;
+		this.accountBalance = 0.00;
 		this.isAdmin = false;
 		this.isApprovedUser = false;
 	}
@@ -46,14 +47,14 @@ public class User implements Serializable {
 	
 	public void withdraw(double amountToWithdraw) {
 		if (this.isApprovedUser) {
-			account -= amountToWithdraw;
+			accountBalance -= amountToWithdraw;
 			log.info("Withdrew " + amountToWithdraw);
 		}
 	}
 			
 	public void deposit(double amountToDeposit) {
 		if (this.isApprovedUser) {
-			account += amountToDeposit;
+			accountBalance += amountToDeposit;
 			log.info("Deposited " + amountToDeposit);
 		}
 	}
@@ -98,12 +99,12 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public double getAccount() {
-		return account;
+	public double getAccountBalance() {
+		return accountBalance;
 	}
 
-	public void setAccount(double account) {
-		this.account = account;
+	public void setAccountBalance(double account) {
+		this.accountBalance = account;
 	}
 
 	public boolean isAdmin() {
@@ -127,7 +128,7 @@ public class User implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(account);
+		temp = Double.doubleToLongBits(accountBalance);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
@@ -147,7 +148,7 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (Double.doubleToLongBits(account) != Double.doubleToLongBits(other.account))
+		if (Double.doubleToLongBits(accountBalance) != Double.doubleToLongBits(other.accountBalance))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -179,7 +180,7 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password=" + password
-				+ ", account=" + account + ", isAdmin=" + isAdmin + ", isApprovedUser=" + isApprovedUser + "]";
+				+ ", accountBalance=" + accountBalance + ", isAdmin=" + isAdmin + ", isApprovedUser=" + isApprovedUser + "]";
 	}
 
 	

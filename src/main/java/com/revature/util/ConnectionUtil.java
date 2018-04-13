@@ -11,6 +11,10 @@ import java.util.Properties;
 
 public class ConnectionUtil {
 	
+	public static void main(String[] args) {
+		System.out.println(ConnectionUtil.getConnection());
+	}
+	
 	private ConnectionUtil() {}
 	
 	public static Connection getConnection() {
