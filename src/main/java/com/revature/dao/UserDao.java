@@ -12,6 +12,6 @@ public interface UserDao {
 	boolean updateUser();
 	boolean deleteUser();
 	boolean deposit(String email, double amountToDeposit);
-	boolean withdraw(String email);
+	boolean withdraw(String email, double amountToWithdraw);
 	
 }

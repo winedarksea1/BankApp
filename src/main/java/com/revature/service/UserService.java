@@ -19,4 +19,8 @@ public class UserService {
 	public boolean deposit(String email, double amountToDeposit) {
 		return userDao.deposit(email, amountToDeposit);
 	}
+	
+	public boolean withdraw(String email, double amountToWithdraw) {
+		return userDao.withdraw(email, amountToWithdraw);
+	}
 }

@@ -99,8 +99,22 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean withdraw(String email) {
-		// TODO Auto-generated method stub
+	public boolean withdraw(String email, double amountToWithdraw) {
+		User user = getUser(email);
+		user.setApprovedUser(true);
+		user.withdraw(amountToWithdraw);
+		
+		try(Connection conn = ConnectionUtil.getConnection()) {
+			PreparedStatement stmt = conn.prepareStatement("UPDATE bank_user SET account_balance=? WHERE email=?");
+			stmt.setDouble(1, user.getAccountBalance());
+			stmt.setString(2, user.getEmail());
+			
+			return stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			System.err.println(e.getSQLState());
+			System.err.println(e.getErrorCode());
+		}
 		return false;
 	}
 

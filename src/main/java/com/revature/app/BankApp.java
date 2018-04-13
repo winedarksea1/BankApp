@@ -21,10 +21,12 @@ public class BankApp {
 //		
 		User user = us.getUser("winedark.mcgovern@gmail.com");
 		user.setApprovedUser(true);
+		
 		System.out.println("Account Balance: " + user.getAccountBalance());
 		
 //		System.out.println("Was deposit successful: " + us.deposit(user.getEmail(), 5.50));
 		
+//		System.out.println("Was withdrawal successful: " + us.withdraw(user.getEmail(), 3.75));
 	}
 
 }
