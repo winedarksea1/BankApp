@@ -25,19 +25,38 @@ public class UserDaoImpl implements UserDao {
 	
 	@Override
 	public boolean insertUser(User user) {
-		// TODO Auto-generated method stub
+
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO bank_user VALUES (null, ?, ?, ?, ?, ?, ?, ?)");
+			stmt.setString(1, user.getFirstName());
+			stmt.setString(2, user.getLastName());
+			stmt.setString(3, user.getEmail());
+			stmt.setString(4, user.getPassword());
+			stmt.setDouble(5, user.getAccountBalance());
+			stmt.setInt(6, 0);
+			stmt.setInt(7, 0);
+			
+			return stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			System.err.println(e.getSQLState());
+			System.err.println(e.getErrorCode());
+		}
+		
 		return false;
 	}
 
 	@Override
 	public User getUser(String email) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			PreparedStatement stmt = conn.prepareStatement("SELECT first_name, last_name, email, user_password, account_balance FROM bank_user WHERE email=?");
+			PreparedStatement stmt = conn.prepareStatement("SELECT first_name, last_name, email, user_password, account_balance, is_admin, is_approved_user FROM bank_user WHERE email=?");
 			stmt.setString(1, email);
 			
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDouble(5));
+				boolean isAdmin = rs.getInt(6) == 1;
+				boolean isApprovedUser = rs.getInt(7) == 1;
+				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDouble(5), isAdmin, isApprovedUser);
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -77,11 +96,39 @@ public class UserDaoImpl implements UserDao {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public boolean approveUser(String userEmail, String adminEmail) throws Exception {
+		User user = getUser(userEmail);
+		User admin = getUser(adminEmail);
+		
+		if (!admin.isAdmin()) {
+			throw new Exception("Must Have Admin Privelages to Approve User");
+		} else {
+			try (Connection conn = ConnectionUtil.getConnection()) {
+				PreparedStatement stmt = conn.prepareStatement("UPDATE bank_user SET is_approved_user=? WHERE email=?");
+				stmt.setInt(1, 1);
+				stmt.setString(2, userEmail);
+				
+				return stmt.executeUpdate() > 0;
+			} catch (SQLException e) {
+				System.err.println(e.getMessage());
+				System.err.println(e.getSQLState());
+				System.err.println(e.getErrorCode());
+			}
+		}
+		
+		return false;
+	}
 
 	@Override
-	public boolean deposit(String email, double amountToDeposit) {
+	public boolean deposit(String email, double amountToDeposit) throws Exception {
 		User user = getUser(email);
-		user.setApprovedUser(true);
+//		user.setApprovedUser(true);
+		if (!user.isApprovedUser()) {
+			throw new Exception("Must be approved to make deposit");
+		}
+		
 		user.deposit(amountToDeposit);
 		
 		try (Connection conn = ConnectionUtil.getConnection()) {
@@ -99,9 +146,13 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean withdraw(String email, double amountToWithdraw) {
+	public boolean withdraw(String email, double amountToWithdraw) throws Exception {
 		User user = getUser(email);
-		user.setApprovedUser(true);
+//		user.setApprovedUser(true);
+		if (!user.isApprovedUser()) {
+			throw new Exception("Must be approved User to make Withdrawal");
+		}
+		
 		user.withdraw(amountToWithdraw);
 		
 		try(Connection conn = ConnectionUtil.getConnection()) {
@@ -117,5 +168,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return false;
 	}
+
+
 
 }

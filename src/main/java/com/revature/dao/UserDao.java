@@ -11,7 +11,8 @@ public interface UserDao {
 	List<User> getUsers();
 	boolean updateUser();
 	boolean deleteUser();
-	boolean deposit(String email, double amountToDeposit);
-	boolean withdraw(String email, double amountToWithdraw);
+	boolean approveUser(String userEmail, String adminEmail) throws Exception;
+	boolean deposit(String email, double amountToDeposit) throws Exception;
+	boolean withdraw(String email, double amountToWithdraw) throws Exception;
 	
 }

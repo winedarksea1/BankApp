@@ -40,19 +40,29 @@ public class User implements Serializable {
 		this.isApprovedUser = false;
 	}
 	
+	public User(String firstName, String lastName, String email, String password, double accountBalance, boolean isAdmin, boolean isApprovedUser) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.accountBalance = accountBalance;
+		this.isAdmin = isAdmin;
+		this.isApprovedUser = isApprovedUser;
+	}
+	
 	public void approveUser(User user) {
-		if (user.isAdmin) {
-			System.out.println("Would you like to approve this User");
-//			String answer = scan.nextString();
-			String answer = "yes";
-			if (answer.toLowerCase() == "yes") {
-				user.isApprovedUser = true;
-			} else {
-				System.out.println("User is not approved");
-			}
-		} else {
-			System.out.println("Must have Admin permissions");
-		}
+//		if (user.isAdmin) {
+//			System.out.println("Would you like to approve this User");
+////			String answer = scan.nextString();
+//			String answer = "yes";
+//			if (answer.toLowerCase() == "yes") {
+//				user.isApprovedUser = true;
+//			} else {
+//				System.out.println("User is not approved");
+//			}
+//		} else {
+//			System.out.println("Must have Admin permissions");
+//		}
 	}
 	
 	public void withdraw(double amountToWithdraw) {
