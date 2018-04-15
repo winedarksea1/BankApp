@@ -90,7 +90,6 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public boolean updateUser() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -172,6 +171,9 @@ public class UserDaoImpl implements UserDao {
 		return false;
 	}
 
-
+	public double checkBalance(User user) throws UserDoesNotExistException {
+		User theUser = getUser(user.getEmail());
+		return theUser.getAccountBalance();
+	}
 
 }

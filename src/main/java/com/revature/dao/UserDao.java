@@ -15,5 +15,6 @@ public interface UserDao {
 	boolean approveUser(String userEmail, String adminEmail) throws Exception;
 	boolean deposit(String email, double amountToDeposit) throws Exception;
 	boolean withdraw(String email, double amountToWithdraw) throws Exception;
-	
+	double checkBalance(User user) throws UserDoesNotExistException;
+
 }

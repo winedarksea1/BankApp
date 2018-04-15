@@ -45,7 +45,7 @@ public class UserService {
 	public boolean deposit(String email, double amountToDeposit) {
 		try {
 			userDao.deposit(email, amountToDeposit);
-			log.info("=====> Deposit Successful");
+			log.info("=====> User " + email + " successfully deposited " + amountToDeposit);
 			return true;
 		} catch (Exception e) {
 			log.info("=====>> Exception Caught in UserService " + e.getMessage());
@@ -56,11 +56,20 @@ public class UserService {
 	public boolean withdraw(String email, double amountToWithdraw) {
 		try {
 			userDao.withdraw(email, amountToWithdraw);
-			log.info("=====>> Withdrawal Successful");
+			log.info("=====>> User " + email + " successfully withdrew " + amountToWithdraw);
 			return true;
 		} catch (Exception e) {
 			log.info("=====>> Exception Caught in UserService " + e.getMessage());
 		}
 		return false;
+	}
+	
+	public double checkBalance(User user) {
+		try {
+			return userDao.checkBalance(user);
+		} catch (UserDoesNotExistException e) {
+			log.info("=====>> Exception Caught in UserService: User Not Found");
+			return 0.00;
+		}
 	}
 }
