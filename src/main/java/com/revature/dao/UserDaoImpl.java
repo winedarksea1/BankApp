@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.exceptions.UserDoesNotExistException;
 import com.revature.user.User;
 import com.revature.util.ConnectionUtil;
 
@@ -47,7 +48,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User getUser(String email) {
+	public User getUser(String email) throws UserDoesNotExistException {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 			PreparedStatement stmt = conn.prepareStatement("SELECT first_name, last_name, email, user_password, account_balance, is_admin, is_approved_user FROM bank_user WHERE email=?");
 			stmt.setString(1, email);
@@ -57,6 +58,8 @@ public class UserDaoImpl implements UserDao {
 				boolean isAdmin = rs.getInt(6) == 1;
 				boolean isApprovedUser = rs.getInt(7) == 1;
 				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDouble(5), isAdmin, isApprovedUser);
+			} else {
+				throw new UserDoesNotExistException("User Not Found");
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.revature.dao.UserDaoImpl;
+import com.revature.exceptions.UserDoesNotExistException;
 import com.revature.user.User;
 
 public class UserService {
@@ -21,7 +22,7 @@ public class UserService {
 		return false;
 	}
 	
-	public User getUser(String email) {
+	public User getUser(String email) throws UserDoesNotExistException {
 		return userDao.getUser(email);
 	}
 	

@@ -2,12 +2,13 @@ package com.revature.dao;
 
 import java.util.List;
 
+import com.revature.exceptions.UserDoesNotExistException;
 import com.revature.user.User;
 
 public interface UserDao {
 	
 	boolean insertUser(User user);
-	User getUser(String email);
+	User getUser(String email) throws UserDoesNotExistException;
 	List<User> getUsers();
 	boolean updateUser();
 	boolean deleteUser();
