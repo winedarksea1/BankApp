@@ -33,7 +33,7 @@ public class UserService {
 	public boolean approveUser(String userEmail, String adminEmail) {
 		try {
 			userDao.approveUser(userEmail, adminEmail);
-			log.info("=====>> User was Approved");
+			log.info("=====>> User " + userEmail + " was Approved");
 			return true;
 		} catch (Exception e) {
 			log.info("=====>> Exception Caught in UserService: " + e.getMessage());

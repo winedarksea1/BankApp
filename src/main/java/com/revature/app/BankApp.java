@@ -86,13 +86,46 @@ public class BankApp {
 			validateUser();
 		} else {
 			System.out.println("Welcome Back " + currUser.getFirstName());
-			loggedInSession(currUser);
+			if (currUser.isAdmin()) {
+				loggedInSessionAdmin(currUser);
+			} else {
+				loggedInSession(currUser);
+			}
 		}
 	}
 	
 	public static void loggedInSession(User user) {
 		System.out.println("What would you like to do: 1) Make A Deposit 2) Make A Withdrawal 3) Check Balance");
 		int answer = scan.nextInt();
+		scan.nextLine();
+		if (answer == 1) {
+			if (user.isApprovedUser()) {
+				makeDeposit(user);
+			} else {
+				System.out.println("Must be an Approved User to make a deposit. Goodbye");
+			}
+		} else if (answer == 2) {
+			if (user.isApprovedUser()) {
+				makeWithdrawal(user);
+			} else {
+				System.out.println("Must be and Approved User to make a withdrawal. Goodbye");
+			}		
+		} else if (answer == 3) {
+			if (user.isApprovedUser()) {
+				checkBalance(user);
+			} else {
+				System.out.println("Must be and Approved User to Check Balance. Goodbye");
+			}
+		} else {
+			System.out.println("That is not a valid response");
+			loggedInSession(user);
+		}
+	}
+	
+	public static void loggedInSessionAdmin(User user) {
+		System.out.println("What would you like to do: 1) Make A Deposit 2) Make A Withdrawal 3) Check Balance 4) Approve A User");
+		int answer = scan.nextInt();
+		scan.nextLine();
 		if (answer == 1) {
 			if (user.isApprovedUser()) {
 				makeDeposit(user);
@@ -109,9 +142,13 @@ public class BankApp {
 			if (user.isApprovedUser()) {
 				checkBalance(user);
 			}
+		} else if (answer == 4) {
+				if (user.isApprovedUser()) {
+					approveUser(user);
+				}
 		} else {
 			System.out.println("That is not a valid response");
-			loggedInSession(user);
+			loggedInSessionAdmin(user);
 		}
 	}
 	
@@ -119,13 +156,15 @@ public class BankApp {
 		System.out.print("How much would you like to deposit: ");
 		double amountToDeposit = scan.nextDouble();
 		us.deposit(user.getEmail(), amountToDeposit);
-		System.out.println("What would you like to do next: 1) Make Another Deposit 2) Make A Withdrawal 3) Exit");
+		System.out.println("What would you like to do next: 1) Make Another Deposit 2) Make A Withdrawal 3) Check Balance 4) Exit");
 		int answer = scan.nextInt();
 		if (answer == 1) {
 			makeDeposit(user);
 		} else if (answer == 2) {
 			makeWithdrawal(user);
 		} else if (answer == 3) {
+			checkBalance(user);
+		} else if (answer == 4) {
 			System.out.println("Goodbye");
 		} else {
 			System.out.println("That is not a valid answer. Goodbye");
@@ -136,13 +175,15 @@ public class BankApp {
 		System.out.print("How much would you like to withdraw: ");
 		double amountToWithdraw = scan.nextDouble();
 		us.withdraw(user.getEmail(), amountToWithdraw);
-		System.out.println("What would you like to do next: 1) Make A Deposit 2) Make Another Withdrawal 3) Exit");
+		System.out.println("What would you like to do next: 1) Make A Deposit 2) Make Another Withdrawal 3) Check Balance 4) Exit");
 		int answer = scan.nextInt();
 		if (answer == 1) {
 			makeDeposit(user);
 		} else if (answer == 2) {
 			makeWithdrawal(user);
 		} else if (answer == 3) {
+			checkBalance(user);
+		} else if (answer == 4) {
 			System.out.println("Goodbye");
 		} else {
 			System.out.println("That is not a valid answer. Goodbye");
@@ -162,5 +203,15 @@ public class BankApp {
 		} else {
 			System.out.println("That is not a valid answer. Goodbye");
 		}		
+	}
+	
+	public static void approveUser(User user) {
+		System.out.print("Enter the email of the user you would like to approve: ");
+		String newUserEmail = scan.nextLine();
+		if (!newUserEmail.isEmpty()) {
+			us.approveUser(newUserEmail, user.getEmail());
+		} else {
+			System.out.println("Must enter a User to approve");
+		}
 	}
 }
