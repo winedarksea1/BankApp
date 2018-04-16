@@ -123,7 +123,7 @@ public class BankApp {
 	}
 	
 	public static void loggedInSessionAdmin(User user) {
-		System.out.println("What would you like to do: 1) Make A Deposit 2) Make A Withdrawal 3) Check Balance 4) Approve A User");
+		System.out.println("What would you like to do: 1) Make A Deposit 2) Make A Withdrawal 3) Check Balance 4) Approve A User 5) Update a users information");
 		int answer = scan.nextInt();
 		scan.nextLine();
 		if (answer == 1) {
@@ -145,7 +145,11 @@ public class BankApp {
 		} else if (answer == 4) {
 				if (user.isApprovedUser()) {
 					approveUser(user);
+				} else {
+					System.out.println("Must be an Admin to Approve Users. Goodbye");
 				}
+		} else if (answer == 5) {
+			updateUser(user);
 		} else {
 			System.out.println("That is not a valid response");
 			loggedInSessionAdmin(user);
@@ -214,4 +218,15 @@ public class BankApp {
 			System.out.println("Must enter a User to approve");
 		}
 	}
+	
+	public static void updateUser(User user) {
+		System.out.print("Please enter email of user you would like to update: ");
+		String email = scan.nextLine();
+		System.out.print("Please enter new first name for user " + email + ":");
+		String newFirstName = scan.nextLine();
+		System.out.print("Please enter new last name for user " + email + ":");
+		String newLastName = scan.nextLine();
+		us.updateUser(email, newFirstName, newLastName);
+	}
+	
 }

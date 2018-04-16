@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -70,6 +71,20 @@ public class UserService {
 		} catch (UserDoesNotExistException e) {
 			log.info("=====>> Exception Caught in UserService: User Not Found");
 			return 0.00;
+		}
+	}
+	
+	public boolean updateUser(String email, String newFirstName, String newLastName) {
+		try {
+			userDao.updateUser(email, newFirstName, newLastName);
+			log.info("=====>> User " + email + " was successfully updated with values: " + newFirstName + " " + newLastName);
+			return true;
+		} catch (SQLException e) {
+			log.info("=====>> Exception Caught in UserService: " + e.getMessage());
+			return false;
+		} catch (UserDoesNotExistException e) {
+			log.info("=====>> Exception Caught in UserService: " + e.getMessage());
+			return false;
 		}
 	}
 }

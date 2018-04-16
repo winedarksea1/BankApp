@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,7 +90,20 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean updateUser() {
+	public boolean updateUser(String email, String newFirstName, String newLastName) throws UserDoesNotExistException, SQLException {
+		User user = getUser(email);
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			CallableStatement stmt = conn.prepareCall("{CALL update_user(?,?,?) }");
+			stmt.setString(1, email);
+			stmt.setString(2, newFirstName);
+			stmt.setString(3, newLastName);
+			
+			return stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			System.err.println(e.getSQLState());
+			System.err.println(e.getErrorCode());
+		}
 		return false;
 	}
 
